@@ -45,11 +45,6 @@ char *get_store(char *str, int fd)
     while (!ft_strchr(line, '\n'))
     {
         buf = read(fd, line, BUFFER_SIZE);
-        if (line[buf])
-        {
-            free(line);
-            return (str);
-        }
         if (buf < 0)
         {
             free(line);
@@ -61,9 +56,8 @@ char *get_store(char *str, int fd)
             free(line);
             return (str);
         }
-        line[buf] = '\0';
+        line[buf] = 0;
         str = ft_strjoin(str ,line);
-        
     }
     free(line);
     return (str);
@@ -88,12 +82,11 @@ char *get_next_line(int fd)
     static char *store;
     char *line;
 
-// printf("khrya");
-    // printf("|%s|\n", store);
     store = get_store(store, fd);
+    //printf("|%s|\n", store);
     line = get_line(store);
     store = ft_next(store);
-    //printf("|%s|\n", store);
+   // printf("|%s|\n", store);
     
     return (line);
 }
@@ -106,6 +99,11 @@ int main()
     printf("%s", get_next_line(fd));
     printf("%s", get_next_line(fd));
     printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+    printf("%s", get_next_line(fd));
+   // printf("%s", get_next_line(fd));
+
+    // printf("%s", get_next_line(fd));
     // get_next_line(fd);
     // get_next_line(fd);
     // get_next_line(fd);
