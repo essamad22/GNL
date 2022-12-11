@@ -19,11 +19,9 @@ char *get_line(char *str)
     int j;
 
     i = 0;
-    j = 0;
+    j = 1;
     if (ft_strchr(str, '\n'))
         j = 2;
-    else
-        j = 1;
     line = malloc(get_len(str) + j);
     while (str[i] != '\n')
     {
