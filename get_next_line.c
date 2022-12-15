@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+// #include "leak_hunter.h"
 
 char *get_line(char *str)
 {
@@ -20,16 +21,24 @@ char *get_line(char *str)
 
     i = 0;
     j = 1;
+    if (!str || !*str)
+        return (NULL);
     if (ft_strchr(str, '\n'))
         j = 2;
-    line = malloc(get_len(str) + j);
-    while (str[i] != '\n')
+    line = malloc(get_len(str) +  j);
+    if (!line)
+    {
+        free(str);
+        return (NULL);
+    }
+    while (str[i] != '\0' && str[i] != '\n')
     {
         line[i] = str[i];
         i++;
     }
-    line[i] = '\n';
-    line[++i] = '\0';
+    if (j == 2)
+        line[i++] = '\n';
+    line[i] = '\0';
     return (line);
 }
 char *get_store(char *str, int fd)
@@ -64,15 +73,27 @@ char *get_store(char *str, int fd)
 char    *ft_next(char *str)
 {
     int i;
-    // char *tmp;
+    char *tmp;
 
     i = 0;
+    if (!str)
+        return (NULL);
     while (str[i] != '\n' && str[i] != '\0')
         i++;
     if(str[i] == '\n')
         i++;
-    str += i;
-    return (str);
+    tmp = malloc(ft_strlen(str + i) + 1);
+    if (!tmp)
+    {
+        free(str);
+        return (NULL);
+    }
+    ft_memcpy(tmp, str + i, (ft_strlen(str) - i));
+    // printf("|1%s1|\n", tmp);
+    // printf("|%s|\n", str);
+    free(str);
+    str = NULL;
+    return (tmp);
 }
 
 char *get_next_line(int fd)
@@ -81,28 +102,26 @@ char *get_next_line(int fd)
     char *line;
 
     store = get_store(store, fd);
-    //printf("|%s|\n", store);
     line = get_line(store);
     store = ft_next(store);
-   // printf("|%s|\n", store);
-    
     return (line);
 }
 
-int main()
-{
-    int fd;
+// int main()
+// {
+//     int fd;
 
-    fd = open("file.txt", 2);
-    printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-    printf("%s", get_next_line(fd));
-   // printf("%s", get_next_line(fd));
+//     fd = open("file.txt", 2);
+//     // atexit(leak_report);
+//     printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
+//     // printf("%s", get_next_line(fd));
+//    // printf("%s", get_next_line(fd));
 
-    // printf("%s", get_next_line(fd));
-    // get_next_line(fd);
-    // get_next_line(fd);
-    // get_next_line(fd);
-}
+//     // printf("%s", get_next_line(fd));
+//     // get_next_line(fd);
+//     // get_next_line(fd);
+//     // get_next_line(fd);
+// }

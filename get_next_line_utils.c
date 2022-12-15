@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+// #include "leak_hunter.h
 
 size_t	ft_strlen(const char *s)
 {
@@ -20,9 +21,7 @@ size_t	ft_strlen(const char *s)
 	if (s == NULL)
 		return (0);
 	while (s[i])
-	{
 		i++;
-	}
 	return (i);
 }
 void	*ft_memcpy(void *dst, const void *src, size_t n)
@@ -45,13 +44,13 @@ void	*ft_memcpy(void *dst, const void *src, size_t n)
 	return (dst);
 }
 
-char	*ft_strdup(const char *s1)
+char	*ft_strdup(char *s1)
 {
 	char	*p;
 	size_t	len;
 
 	len = ft_strlen(s1);
-	p = malloc(sizeof(char) * (len + 1));
+	p = malloc(len + 1);
 	if (!p)
 		return (NULL);
 	ft_memcpy(p, s1, len + 1);
@@ -80,14 +79,20 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memcpy(new_str, str1, ft_strlen(str1));
 	ft_memcpy((new_str + ft_strlen(str1)), str2, ft_strlen(str2));
 	new_str[i] = '\0';
+	free(str1);
 	return (new_str);
 }
 
 char	*ft_strchr(const char *s, int c)
 {
-	while (*s && *s != (unsigned char )c)
-		s++;
-	if (*s == (unsigned char)c)
+	int i;
+
+	i = 0;
+	if (!s)
+		return (NULL);
+	while (s[i] && s[i] != (unsigned char )c)
+		i++;
+	if (s[i] == (unsigned char)c)
 		return ((char *)s);
 	return (NULL);
 }
@@ -99,7 +104,7 @@ int get_len(char *str)
 	i = 0;
 	if (!str)
 		return (0);
-	while (str[i] != '\n')
+	while (str[i] && str[i] != '\n')
 		i++;
 	return (i);
 }
