@@ -11,16 +11,16 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-// #include "leak_hunter.h
+// #include "leak_hunter.h"
 
 size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
 	i = 0;
-	if (s == NULL)
+	if (!s)
 		return (0);
-	while (s[i])
+	while (s[i] != '\0')
 		i++;
 	return (i);
 }
@@ -57,21 +57,15 @@ char	*ft_strdup(char *s1)
 	return (p);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *str1, char *str2)
 {
-	char	*str1;
-	char	*str2;
 	char	*new_str;
 	size_t	i;
 
-	str1 = (char *)s1;
-	str2 = (char *)s2;
 	if (!str1 && !str2)
 		return (NULL);
     else if (!str1)
         return (ft_strdup(str2));
-    else if (!str2)
-        return (ft_strdup(str1));
 	i = ft_strlen(str1) + ft_strlen(str2);
 	new_str = malloc(sizeof(char) * (i + 1));
 	if (!new_str)

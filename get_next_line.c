@@ -13,13 +13,19 @@
 #include "get_next_line.h"
 // #include "leak_hunter.h"
 
-char *get_line(char *str)
+char	*ft_free(char *store)
+{
+	free(store);
+	return (NULL);
+}
+
+char *ft_line(char *str)
 {
     char *line;
     int i;
     int j;
 
-    i = 0;
+    i = -1;
     j = 1;
     if (!str || !*str)
         return (NULL);
@@ -27,47 +33,42 @@ char *get_line(char *str)
         j = 2;
     line = malloc(get_len(str) +  j);
     if (!line)
-    {
-        free(str);
-        return (NULL);
-    }
-    while (str[i] != '\0' && str[i] != '\n')
-    {
+        return (ft_free(str));
+    while (str[++i] != '\0' && str[i] != '\n')
         line[i] = str[i];
-        i++;
-    }
     if (j == 2)
         line[i++] = '\n';
     line[i] = '\0';
     return (line);
 }
-char *get_store(char *str, int fd)
-{
-    char *line;
-    int buf;
 
-    line = malloc(BUFFER_SIZE + 1);
-    if (!line)
-        return (NULL);
-    while (!ft_strchr(line, '\n'))
-    {
-        buf = read(fd, line, BUFFER_SIZE);
-        if (buf < 0)
-        {
-            free(line);
-            free(str);
-            return (NULL);
-        }
-        if (buf == 0)
-        {
-            free(line);
-            return (str);
-        }
-        line[buf] = 0;
-        str = ft_strjoin(str ,line);
-    }
-    free(line);
-    return (str);
+char	*get_store(char *store, int fd)
+{
+	char	*line;
+	int		i;
+
+	line = malloc(BUFFER_SIZE + 1);
+	if (!line)
+		return (NULL);
+	while (!ft_strchr(store, '\n'))
+	{
+		i = read(fd, line, BUFFER_SIZE);
+		if (i < 0)
+		{
+			free(line);
+			free(store);
+			return (NULL);
+		}
+		else if (i == 0)
+		{
+			free (line);
+			return (store);
+		}
+		line[i] = '\0';
+		store = ft_strjoin(store, line);
+	}
+	free(line);
+	return (store);
 }
 
 char    *ft_next(char *str)
@@ -75,36 +76,31 @@ char    *ft_next(char *str)
     int i;
     char *tmp;
 
-    i = 0;
     if (!str)
         return (NULL);
-    while (str[i] != '\n' && str[i] != '\0')
-        i++;
-    if(str[i] == '\n')
-        i++;
-    tmp = malloc(ft_strlen(str + i) + 1);
+    i = get_len(str);
+    if (i - ft_strlen(str) == 0)
+        return (ft_free(str));
+    tmp = malloc(ft_strlen(str) - i);
     if (!tmp)
-    {
-        free(str);
-        return (NULL);
-    }
+        return (ft_free(str));
+    if (str[i] == '\n')
+        i++;
     ft_memcpy(tmp, str + i, (ft_strlen(str) - i));
-    // printf("|1%s1|\n", tmp);
-    // printf("|%s|\n", str);
+    tmp[ft_strlen(str) - i] = '\0';
     free(str);
-    str = NULL;
     return (tmp);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-    static char *store;
-    char *line;
+	static char	*store;
+	char		*line;
 
-    store = get_store(store, fd);
-    line = get_line(store);
-    store = ft_next(store);
-    return (line);
+	store = get_store(store, fd);
+	line = ft_line(store);
+	store = ft_next(store);
+	return (line);
 }
 
 // int main()
@@ -112,16 +108,24 @@ char *get_next_line(int fd)
 //     int fd;
 
 //     fd = open("file.txt", 2);
-//     // atexit(leak_report);
+// //     atexit(leak_report);
 //     printf("%s", get_next_line(fd));
 //     printf("%s", get_next_line(fd));
 //     printf("%s", get_next_line(fd));
 //     printf("%s", get_next_line(fd));
-//     // printf("%s", get_next_line(fd));
-//    // printf("%s", get_next_line(fd));
+//     printf("%s", get_next_line(fd));
+// //     printf("%s", get_next_line(fd));
+// //     printf("%s", get_next_line(fd));
+// //     // printf("%s", get_next_line(fd));
+// //     // printf("%s", get_next_line(fd));
+// //     // printf("%s", get_next_line(fd));
+// //    // printf("%s", get_next_line(fd));
 
-//     // printf("%s", get_next_line(fd));
-//     // get_next_line(fd);
-//     // get_next_line(fd);
-//     // get_next_line(fd);
+// //     // printf("%s", get_next_line(fd));
+// //     // get_next_line(fd);
+// //     // get_next_line(fd);
+// //     // get_next_line(fd);
+// //     // get_next_line(fd);
+// //     // get_next_line(fd);
+// //     // get_next_line(fd);
 // }
