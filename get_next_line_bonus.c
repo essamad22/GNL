@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aakhtab <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/06 16:19:42 by aakhtab           #+#    #+#             */
-/*   Updated: 2022/12/25 01:48:48 by aakhtab          ###   ########.fr       */
+/*   Created: 2022/12/25 00:51:38 by aakhtab           #+#    #+#             */
+/*   Updated: 2022/12/25 00:51:41 by aakhtab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 char	*ft_free(char *store)
 {
@@ -93,38 +93,39 @@ char	*ft_next(char *str)
 
 char	*get_next_line(int fd)
 {
-	static char	*store;
+	static char	*store[OPEN_MAX];
 	char		*line;
 
-	store = get_store(store, fd);
-	line = ft_line(store);
-	store = ft_next(store);
+	store[fd] = get_store(store[fd], fd);
+	line = ft_line(store[fd]);
+	store[fd] = ft_next(store[fd]);
 	return (line);
 }
 
 // int main()
 // {
-//     int fd;
+//     int fd[6];
+//     int i = 0;
+//     int j;
+//     mode_t mode = O_CREAT | O_RDWR;
 
-//     fd = open("file.txt", 2);
-// //     atexit(leak_report);
-//     printf("%s", get_next_line(fd));
-//     printf("%s", get_next_line(fd));
-//     printf("%s", get_next_line(fd));
-//     printf("%s", get_next_line(fd));
-//     printf("%s", get_next_line(fd));
-// //     printf("%s", get_next_line(fd));
-// //     printf("%s", get_next_line(fd));
-// //     // printf("%s", get_next_line(fd));
-// //     // printf("%s", get_next_line(fd));
-// //     // printf("%s", get_next_line(fd));
-// //    // printf("%s", get_next_line(fd));
+//     fd[0] = open("file.txt", mode , 777);
+//     fd[1] = open("file1.txt", mode , 777);
+//     fd[2] = open("file2.txt", mode , 777);
+//     fd[3] = open("file3.txt", mode , 777);
+//     fd[4] = open("file4.txt", mode , 777);
+//     fd[5] = open("file5.txt", mode , 777);
 
-// //     // printf("%s", get_next_line(fd));
-// //     // get_next_line(fd);
-// //     // get_next_line(fd);
-// //     // get_next_line(fd);
-// //     // get_next_line(fd);
-// //     // get_next_line(fd);
-// //     // get_next_line(fd);
+//     while (i <= 5)
+//     {
+//         j = 0;
+//         while (j < 5)
+//         {
+//             printf("%s",get_next_line(fd[i]));
+//             j++;
+//         }
+//         if (i < 5)
+//             printf("\nnext file:\n");
+//         i++;
+//     }
 // }

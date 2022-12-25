@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aakhtab <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/07 21:02:27 by aakhtab           #+#    #+#             */
-/*   Updated: 2022/12/25 01:52:13 by aakhtab          ###   ########.fr       */
+/*   Created: 2022/12/25 00:52:31 by aakhtab           #+#    #+#             */
+/*   Updated: 2022/12/25 01:57:25 by aakhtab          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-// #include "leak_hunter.h"
+#include "get_next_line_bonus.h"
 
 size_t	ft_strlen(const char *s)
 {
